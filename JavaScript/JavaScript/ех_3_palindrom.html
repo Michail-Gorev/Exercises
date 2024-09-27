@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Палиндром Проверка</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title text-center">Проверка на палиндром</h3>
+          </div>
+          <div class="card-body">
+            <p>Для того, чтобы ввести строку и проверить, не является ли она палиндромом, нажмите на кнопку.</p>
+            <button class="btn btn-primary" onclick="checkPalindrome()">Проверить</button>
+            <div id="result" class="mt-3"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function checkPalindrome() {
+      const inputString = prompt("Введите строку:");
+      if (inputString === null) {
+        return;
+      }
+      const cleanedString = inputString.toLowerCase().replace(/[^a-zа-я0-9]/g, '');
+      const reversedString = cleanedString.split('').reverse().join('');
+
+      if (cleanedString === reversedString) {
+        alert("Строка является палиндромом!");
+      } else {
+        alert("Строка не является палиндромом.");
+      }
+    }
+
+    checkPalindrome();
+  </script>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

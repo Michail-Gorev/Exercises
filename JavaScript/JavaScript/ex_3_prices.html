@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Анализ цен</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Анализ средних цен</h1>
+        <div class="form-group">
+            <label for="products">Введите информацию о товарах:</label>
+            <textarea class="form-control" id="products" rows="5" placeholder="'<товар>': ‹цена1>, ‹цена2>, ‹цена3>; ..."></textarea>
+        </div>
+        <button id="calculate" class="btn btn-primary">Рассчитать</button>
+        <div id="result" class="mt-3"></div>
+    </div>
+
+    <script>
+        const productsInput = document.getElementById('products');
+        const calculateButton = document.getElementById('calculate');
+        const resultDiv = document.getElementById('result');
+
+        calculateButton.addEventListener('click', () => {
+            const productData = productsInput.value.trim().split('; ');
+
+            const productPrices = {};
+            for (const data of productData) {
+                const [product, pricesStr] = data.trim().split(': ');
+                const prices = pricesStr.trim().split(', ').map(Number);
+                productPrices[product] = prices;
+            }
+
+            const sortedProducts = Object.entries(productPrices)
+                .map(([product, prices]) => ({
+                    product: product,
+                    averagePrice: prices.reduce((sum, price) => sum + price, 0) / prices.length
+                }))
+                .sort((a, b) => {
+                    if (a.averagePrice !== b.averagePrice) {
+                        return a.averagePrice - b.averagePrice;
+                    } else {
+                        return a.product.localeCompare(b.product);
+                    }
+                })
+                .map(item => item.product);
+
+            resultDiv.innerHTML = sortedProducts.join('<br>');
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
