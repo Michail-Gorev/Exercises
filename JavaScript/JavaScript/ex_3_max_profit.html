@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Анализ прибыли</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Анализ суммарной прибыли</h1>
+        <div class="form-group">
+            <label for="salesData">Введите данные о продажах:</label>
+            <textarea class="form-control" id="salesData" rows="10" placeholder="'Товар', прибыль; ..."></textarea>
+        </div>
+        <button id="calculate" class="btn btn-primary">Рассчитать</button>
+        <div id="result" class="mt-3"></div>
+    </div>
+
+    <script>
+        const salesDataInput = document.getElementById('salesData');
+        const calculateButton = document.getElementById('calculate');
+        const resultDiv = document.getElementById('result');
+
+        calculateButton.addEventListener('click', () => {
+            const salesData = salesDataInput.value.trim().split(/\r\n|\r|\n/g);
+            const productProfits = {};
+
+            for (let i = 0; i < salesData.length; i++) {
+                const line = salesData[i].trim();
+                if (line === 'END') {
+                    break;
+                }
+
+                const [product, profitStr] = line.split(',');
+                const profit = parseInt(profitStr.trim());
+
+                if (productProfits.hasOwnProperty(product)) {
+                    productProfits[product] += profit;
+                } else {
+                    productProfits[product] = profit;
+                }
+            }
+
+            let maxProfit = 0;
+            let maxProfitProduct = '';
+
+            for (const product in productProfits) {
+                if (productProfits[product] > maxProfit) {
+                    maxProfit = productProfits[product];
+                    maxProfitProduct = product;
+                }
+            }
+
+            resultDiv.innerHTML = `Товар, приносящий максимальную прибыль: <strong>${maxProfitProduct}</strong>, суммарная прибыль: <strong>${maxProfit}</strong>`;
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Анализ концертов</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Анализ концертов</h1>
+        <div class="form-group">
+            <label for="concertData">Введите данные о концертах:</label>
+            <textarea class="form-control" id="concertData" rows="10" placeholder="'Группа', ДД.ММ.ГГГГ; ..."></textarea>
+        </div>
+        <button id="calculate" class="btn btn-primary">Рассчитать</button>
+        <div id="result" class="mt-3"></div>
+    </div>
+
+    <script>
+        const concertDataInput = document.getElementById('concertData');
+        const calculateButton = document.getElementById('calculate');
+        const resultDiv = document.getElementById('result');
+
+        calculateButton.addEventListener('click', () => {
+            const concertData = concertDataInput.value.trim().split(/\r\n|\r|\n/g);
+            const groupConcerts = {};
+
+            for (let i = 0; i < concertData.length; i++) {
+                const line = concertData[i].trim();
+                if (line === 'END') {
+                    break;
+                }
+
+                const [group, dateStr] = line.split(', ');
+                const year = parseInt(dateStr.trim().split('.').pop());
+
+                if (year === 2023) {
+                    if (groupConcerts.hasOwnProperty(group)) {
+                        groupConcerts[group]++;
+                    } else {
+                        groupConcerts[group] = 1;
+                    }
+                }
+            }
+
+            let maxConcerts = 0;
+            let maxConcertsGroup = '';
+
+            for (const group in groupConcerts) {
+                if (groupConcerts[group] > maxConcerts) {
+                    maxConcerts = groupConcerts[group];
+                    maxConcertsGroup = group;
+                }
+            }
+
+            resultDiv.innerHTML =`Группа с наибольшим количеством концертов: <strong>${maxConcertsGroup}</strong>, количество концертов: <strong>${maxConcerts}</strong>`;
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

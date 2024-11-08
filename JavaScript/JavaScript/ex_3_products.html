@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калорийность продуктов</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Подсчет калорийности</h1>
+        <div class="form-group">
+            <label for="products">Введите названия продуктов:</label>
+            <input type="text" class="form-control" id="products" placeholder="Названия продуктов через пробел">
+        </div>
+        <div class="form-group">
+            <label for="nutrients">Введите информацию о белках, жирах и углеводах:</label>
+            <input type="text" class="form-control" id="nutrients" placeholder="Информация в формате '<белки>-<жиры>-<углеводы>'">
+        </div>
+        <button id="calculate" class="btn btn-primary">Рассчитать</button>
+        <div id="result" class="mt-3"></div>
+    </div>
+
+    <script>
+        const productsInput = document.getElementById('products');
+        const nutrientsInput = document.getElementById('nutrients');
+        const calculateButton = document.getElementById('calculate');
+        const resultDiv = document.getElementById('result');
+
+        calculateButton.addEventListener('click', () => {
+            const products = productsInput.value.trim().split(' ');
+            const nutrients = nutrientsInput.value.trim().split(' ');
+
+            let lowestCalories = Infinity;
+            let lowestCaloriesProduct = '';
+
+            if (products.length !== nutrients.length) {
+                resultDiv.innerHTML = "Ошибка: количество продуктов и информации о питательных веществах не совпадает";
+                return;
+            }
+
+            for (let i = 0; i < products.length; i++) {
+                const product = products[i].trim();
+                const nutrientStr = nutrients[i].trim().split('-');
+                const nutrientArr = nutrientStr.map(Number);
+
+                const calories = 0.4 * nutrientArr[0] + 0.3 * nutrientArr[1] + 0.3 * nutrientArr[2];
+
+                if (calories < lowestCalories) {
+                    lowestCalories = calories;
+                    lowestCaloriesProduct = product;
+                }
+            }
+
+            resultDiv.innerHTML = `Самый низкокалорийный продукт <strong>${lowestCaloriesProduct}</strong>`;
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
